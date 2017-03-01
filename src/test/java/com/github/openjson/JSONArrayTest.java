@@ -20,6 +20,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -604,5 +605,40 @@ public class JSONArrayTest {
         // This doesn't because it's not.
         JSONArray a2 = new JSONArray(MyEnum.values());
         assertEquals("[\"A\",\"B\",\"C\"]", a2.toString());
+    }
+
+    @Test
+    public void testIterator() {
+        JSONArray array = new JSONArray();
+
+        array.put(1);
+        array.put("X");
+        array.put(new JSONArray());
+        array.put(JSONObject.NULL);
+        Iterator<Object> it = array.iterator();
+        assertNotNull(it);
+
+        assertTrue(it.hasNext());
+        assertEquals(1, it.next());
+
+        assertTrue(it.hasNext());
+        assertEquals("X", it.next());
+
+        assertTrue(it.hasNext());
+        assertEquals(new JSONArray(), it.next());
+
+        assertTrue(it.hasNext());
+        assertEquals(JSONObject.NULL, it.next());
+
+        assertFalse(it.hasNext());
+    }
+
+    @Test
+    public void testIteratorForEmptyArray() {
+        JSONArray array = new JSONArray();
+        Iterator<Object> it = array.iterator();
+        assertNotNull(it);
+
+        assertFalse(it.hasNext());
     }
 }
