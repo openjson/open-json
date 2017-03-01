@@ -139,6 +139,18 @@ public class SelfUseTest {
             arrayOptTypeCalls++;
             return super.optInt(index, fallback);
         }
+
+        @Override
+        public JSONArray optJSONArray(int index) {
+            arrayOptTypeCalls++;
+            return super.optJSONArray(index);
+        }
+
+        @Override
+        public JSONObject optJSONObject(int index) {
+            arrayOptTypeCalls++;
+            return super.optJSONObject(index);
+        }
     };
 
     private final JSONTokener tokener = new JSONTokener("{\"foo\": [true]}") {
@@ -244,6 +256,12 @@ public class SelfUseTest {
         array.optString(3);
         assertEquals(5, arrayOptCalls);
         assertEquals(5, arrayOptTypeCalls);
+        array.optJSONObject(3);
+        assertEquals(6, arrayOptCalls);
+        assertEquals(6, arrayOptTypeCalls);
+        array.optJSONArray(3);
+        assertEquals(7, arrayOptCalls);
+        assertEquals(7, arrayOptTypeCalls);
     }
 
     @Test

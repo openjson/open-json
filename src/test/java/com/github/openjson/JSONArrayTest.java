@@ -211,10 +211,14 @@ public class JSONArrayTest {
         array.put(9223372036854775806L);
         array.put(Double.MAX_VALUE);
         array.put(-0d);
-        assertEquals(4, array.length());
+        JSONObject objElement = new JSONObject();
+        array.put(objElement);
+        JSONArray arrElement = new JSONArray();
+        array.put(arrElement);
+        assertEquals(6, array.length());
 
         // toString() and getString(int) return different values for -0d
-        assertEquals("[4.9E-324,9223372036854775806,1.7976931348623157E308,-0]", array.toString());
+        assertEquals("[4.9E-324,9223372036854775806,1.7976931348623157E308,-0,{},[]]", array.toString());
 
         assertEquals(Double.MIN_VALUE, array.get(0));
         assertEquals(9223372036854775806L, array.get(1));
@@ -239,13 +243,16 @@ public class JSONArrayTest {
         assertEquals("4.9E-324", array.getString(0));
         assertEquals("9223372036854775806", array.getString(1));
         assertEquals("1.7976931348623157E308", array.getString(2));
-        assertEquals("-0.0", array.getString(3));
+        assertEquals(objElement, array.getJSONObject(4));
+        assertEquals(arrElement, array.getJSONArray(5));
 
         JSONArray other = new JSONArray();
         other.put(Double.MIN_VALUE);
         other.put(9223372036854775806L);
         other.put(Double.MAX_VALUE);
         other.put(-0d);
+        other.put(objElement);
+        other.put(arrElement);
         assertTrue(array.equals(other));
         other.put(0, 0L);
         assertFalse(array.equals(other));
