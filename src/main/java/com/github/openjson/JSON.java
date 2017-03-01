@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.json;
+package com.github.openjson;
 
 class JSON {
     /**

@@ -4,14 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.tdunning</groupId>
-    <artifactId>json</artifactId>
-    <version>1.8-SNAPSHOT</version>
+    <groupId>com.github.openjson</groupId>
+    <artifactId>openjson</artifactId>
+    <version>1.0.0</version>
 
     <packaging>jar</packaging>
     <name>Open JSON</name>
     <description>A clean-room Apache-licensed implementation of simple JSON processing</description>
-    <url>https://github.com/tdunning/open-json</url>
+    <url>https://github.com/openjson/openjson</url>
 
     <licenses>
         <license>
@@ -22,25 +22,16 @@
     </licenses>
 
     <scm>
-        <connection>scm:git:https://github.com/tdunning/open-json.git</connection>
-        <developerConnection>scm:git:https://github.com/tdunning/open-json.git</developerConnection>
+        <connection>scm:git:https://github.com/openjson/openjson.git</connection>
+        <developerConnection>scm:git:https://github.com/openjson/openjson.git</developerConnection>
         <tag>HEAD</tag>
-        <url>https://github.com/tdunning/open-json</url>
+        <url>https://github.com/openjson/openjson</url>
     </scm>
 
     <developers>
         <developer>
-            <id>tdunning</id>
-            <name>Ted</name>
-            <email>ted.dunning@gmail.com</email>
-            <url>https://github.com/tdunning/open-json</url>
-            <roles>
-                <role>developer</role>
-            </roles>
-            <timezone>-8</timezone>
-            <properties>
-                <twitter>@ted_dunning</twitter>
-            </properties>
+            <id>openjson</id>
+            <name>openjson team</name>
         </developer>
     </developers>
 
@@ -62,7 +53,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>3.6.1</version>
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
@@ -133,11 +124,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.4</version>
-                        <configuration>
-                            <passphrase>${gpg.passphrase}</passphrase>
-                            <keyname>${gpg.keyname}</keyname>
-                        </configuration>
+                        <version>1.6</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
