@@ -1,7 +1,6 @@
 # Open JSON
 
 [![Build Status](https://travis-ci.org/openjson/openjson.svg?branch=master)]	(https://travis-ci.org/openjson/openjson)
-[![Coverage Status](https://coveralls.io/repos/github/openjson/openjson/badge.svg?branch=master)](https://coveralls.io/github/openjson/openjson?branch=master)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 
