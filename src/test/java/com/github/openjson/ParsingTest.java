@@ -126,6 +126,7 @@ public class ParsingTest {
     public void testParsingHexNumbers() throws JSONException {
         assertParsed(5, "0x5");
         assertParsed(16, "0x10");
+        assertParsed(17, "0X11");
         assertParsed(8230, "0x2026");
         assertParsed(180150010, "0xABCDEFA");
         assertParsed(2077093803, "0x7BCDEFAB");

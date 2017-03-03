@@ -25,6 +25,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -35,11 +36,18 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * This black box test was written without inspecting the non-free org.json sourcecode.
  */
+@SuppressWarnings({"unused", "SpellCheckingInspection"})
 public class JSONObjectTest {
     @Test
     public void testKeyset() throws Exception {
@@ -270,6 +278,27 @@ public class JSONObjectTest {
         assertEquals(false, object.optBoolean("bar"));
         assertEquals(true, object.optBoolean("foo", false));
         assertEquals(false, object.optBoolean("bar", false));
+    }
+
+    @Test
+    public void testCoerceStringToNumber() throws JSONException {
+        JSONObject object = new JSONObject();
+        object.put("v1", "1");
+        object.put("v2", "-1");
+        assertEquals(1,  object.getInt("v1"));
+        assertEquals(-1, object.getLong("v2"));
+    }
+
+    @Test
+    public void testCoerceStringToNumberWithFail() throws JSONException {
+        JSONObject object = new JSONObject();
+        object.put("key", "not a number");
+        try {
+            object.getLong("key");
+            fail();
+        } catch (JSONException ignored) {
+        }
+        assertEquals(0, object.optLong("key"));
     }
 
     // http://code.google.com/p/android/issues/detail?id=16411
@@ -741,6 +770,17 @@ public class JSONObjectTest {
         }
     }
 
+    /**
+     * Warning: org.json package does allow nulls as values. We don't.
+     * See {@link JSONObject#JSONObject(Map)} for details.
+     */
+    @Test(expected = NullPointerException.class)
+    public void testMapConstructorWithBogusEntries2() {
+        Map<Object, Object> contents = new HashMap<Object, Object>();
+        contents.put(null, 5);
+        new JSONObject(contents);
+    }
+
     @Test
     public void testTokenerConstructor() throws JSONException {
         JSONObject object = new JSONObject(new JSONTokener("{\"foo\": false}"));
@@ -1070,8 +1110,26 @@ public class JSONObjectTest {
         assertTrue(JSONObject.wrap(new byte[0]) instanceof JSONArray);
         assertTrue(JSONObject.wrap(new ArrayList<String>()) instanceof JSONArray);
         assertTrue(JSONObject.wrap(new HashMap<String, String>()) instanceof JSONObject);
-        assertTrue(JSONObject.wrap(0.0) instanceof Double);
+        assertTrue(JSONObject.wrap(new Object()) instanceof String);
+        assertTrue(JSONObject.wrap(new Date()) instanceof String);
+        assertTrue(JSONObject.wrap(new Bar()) instanceof JSONObject);
+
+        assertTrue(JSONObject.wrap(true) instanceof Boolean);
+        assertTrue(JSONObject.wrap((byte)1) instanceof Byte);
+        assertTrue(JSONObject.wrap('\0') instanceof Character);
+        assertTrue(JSONObject.wrap(0.0D) instanceof Double);
+        assertTrue(JSONObject.wrap(0.0F) instanceof Float);
+        assertTrue(JSONObject.wrap(0) instanceof Integer);
+        assertTrue(JSONObject.wrap(0L) instanceof Long);
+        assertTrue(JSONObject.wrap((short)0) instanceof Short);
         assertTrue(JSONObject.wrap("hello") instanceof String);
+
+        assertNull(JSONObject.wrap(
+                new Object() {
+                    public String getX() {
+                        throw new IllegalStateException("unsupported");
+                    }
+                }));
     }
 
     // https://code.google.com/p/android/issues/detail?id=55114
@@ -1141,6 +1199,17 @@ public class JSONObjectTest {
         assertEquals("{\"a\":1,\"b\":1,\"c\":\"c\",\"d\":[{\"e\":\"echo\"}]}", new JSONObject(f).toString());
     }
 
+    @Test(expected = JSONException.class)
+    public void testBeanThingsWithErrors() throws IllegalAccessException, IntrospectionException, InvocationTargetException {
+        Foo f = new Foo() {
+            @Override
+            public double getA() {
+                throw new IllegalStateException("Error!");
+            }
+        };
+        new JSONObject(f);
+    }
+
     @Test
     public void testGetNames() throws Exception {
         assertArrayEquals(new String[]{"a", "b", "c", "d"}, JSONObject.getNames(new JSONObject(new Foo())));
@@ -1179,7 +1248,7 @@ public class JSONObjectTest {
         assertTrue(y instanceof String);
     }
 
-    enum E {
+   enum E {
         A {
             int key() {
                 return 1;

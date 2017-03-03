@@ -50,8 +50,4 @@ public class JSONException extends RuntimeException {
     public JSONException(Throwable cause) {
         super(cause);
     }
-
-    public JSONException(String message, Throwable cause) {
-        super(message, cause);
-    }
 }
