@@ -1,6 +1,6 @@
 # Open JSON
 
-[![Build Status](https://travis-ci.org/openjson/openjson.svg?branch=master)]	(https://travis-ci.org/openjson/openjson)
+[![Build Status](https://travis-ci.org/openjson/openjson.svg?branch=master)](https://travis-ci.org/openjson/openjson)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 
@@ -17,13 +17,14 @@ find this license condition unacceptable. The moral is
 don't put jokes into legal documents.
 
 ## Maven
-
+```xml
     <dependency>
         <groupId>com.github.openjson</groupId>
         <artifactId>openjson</artifactId>
         <version>1.0.0</version>
     </dependency>
-    
+```
+  
 # Acknowledgements
 
 Thanks to the Android team for doing 99% of the work.
