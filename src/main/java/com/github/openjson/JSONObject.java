@@ -140,17 +140,19 @@ public class JSONObject {
     /* (accept a raw type for API compatibility) */
     public JSONObject(Map copyFrom) {
         this();
-        Map<?, ?> contentsTyped = (Map<?, ?>) copyFrom;
-        for (Map.Entry<?, ?> entry : contentsTyped.entrySet()) {
+        if (copyFrom != null) {
+            Map<?, ?> contentsTyped = (Map<?, ?>) copyFrom;
+            for (Map.Entry<?, ?> entry : contentsTyped.entrySet()) {
             /*
              * Deviate from the original by checking that keys are non-null and
              * of the proper type. (We still defer validating the values).
              */
-            String key = (String) entry.getKey();
-            if (key == null) {
-                throw new NullPointerException("key == null");
+                String key = (String) entry.getKey();
+                if (key == null) {
+                    throw new NullPointerException("key == null");
+                }
+                nameValuePairs.put(key, wrap(entry.getValue()));
             }
-            nameValuePairs.put(key, wrap(entry.getValue()));
         }
     }
 
@@ -321,6 +323,10 @@ public class JSONObject {
      *              Integer, Long, Double, {@link #NULL}, or {@code null}. May not be
      *              {@link Double#isNaN() NaNs} or {@link Double#isInfinite()
      *              infinities}.
+     *              If value is Map or Collection the value is wrapped using
+     *              corresponding JSONObject(map) or JSONArray(collection) object.
+     *              This behavior is considered unsafe and is added for compatibility
+     *              with original 'org.json' package only.
      * @return this object.
      * @throws JSONException if the value is an invalid double (infinite or NaN).
      */
@@ -329,11 +335,16 @@ public class JSONObject {
             nameValuePairs.remove(name);
             return this;
         }
+        Object valueToPut = value;
         if (value instanceof Number) {
             // deviate from the original by checking all Numbers, not just floats & doubles
             JSON.checkDouble(((Number) value).doubleValue());
+        } else if (value instanceof Collection) {
+            valueToPut = new JSONArray((Collection) value);
+        } else if (value instanceof Map) {
+            valueToPut = new JSONObject((Map)value);
         }
-        nameValuePairs.put(checkName(name), value);
+        nameValuePairs.put(checkName(name), valueToPut);
         return this;
     }
 
