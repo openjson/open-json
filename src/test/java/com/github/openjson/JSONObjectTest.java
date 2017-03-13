@@ -285,7 +285,7 @@ public class JSONObjectTest {
         JSONObject object = new JSONObject();
         object.put("v1", "1");
         object.put("v2", "-1");
-        assertEquals(1,  object.getInt("v1"));
+        assertEquals(1, object.getInt("v1"));
         assertEquals(-1, object.getLong("v2"));
     }
 
@@ -575,6 +575,35 @@ public class JSONObjectTest {
     }
 
     @Test
+    public void testPutCollection() throws JSONException {
+        JSONObject object = new JSONObject();
+        object.put("array", Arrays.asList("1", 1, 3D));
+
+        JSONArray array = object.getJSONArray("array");
+        assertEquals(3, array.length());
+        assertEquals("1", array.get(0));
+        assertEquals(1, array.get(1));
+        assertEquals(3D, array.get(2));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testPutMap() throws JSONException {
+        JSONObject object = new JSONObject();
+        object.put("map", new HashMap() {{
+            put("x", "1");
+            put("y", 1);
+            put("z", 3D);
+        }});
+
+        JSONObject map = object.getJSONObject("map");
+        assertEquals(3, map.length());
+        assertEquals("1", map.get("x"));
+        assertEquals(1, map.get("y"));
+        assertEquals(3D, map.get("z"));
+    }
+
+    @Test
     public void testAccumulateValueChecking() throws JSONException {
         JSONObject object = new JSONObject();
         try {
@@ -747,6 +776,12 @@ public class JSONObjectTest {
         // when the object contains an unsupported number, toString returns null!
         JSONObject object = new JSONObject(Collections.singletonMap("foo", Double.NaN));
         assertEquals(null, object.toString());
+    }
+
+    @Test
+    public void testMapConstructorWithNull() throws JSONException {
+        JSONObject object = new JSONObject((Map)null);
+        assertEquals(0, object.keySet().size());
     }
 
     @Test
@@ -1115,13 +1150,13 @@ public class JSONObjectTest {
         assertTrue(JSONObject.wrap(new Bar()) instanceof JSONObject);
 
         assertTrue(JSONObject.wrap(true) instanceof Boolean);
-        assertTrue(JSONObject.wrap((byte)1) instanceof Byte);
+        assertTrue(JSONObject.wrap((byte) 1) instanceof Byte);
         assertTrue(JSONObject.wrap('\0') instanceof Character);
         assertTrue(JSONObject.wrap(0.0D) instanceof Double);
         assertTrue(JSONObject.wrap(0.0F) instanceof Float);
         assertTrue(JSONObject.wrap(0) instanceof Integer);
         assertTrue(JSONObject.wrap(0L) instanceof Long);
-        assertTrue(JSONObject.wrap((short)0) instanceof Short);
+        assertTrue(JSONObject.wrap((short) 0) instanceof Short);
         assertTrue(JSONObject.wrap("hello") instanceof String);
 
         assertNull(JSONObject.wrap(
@@ -1248,7 +1283,7 @@ public class JSONObjectTest {
         assertTrue(y instanceof String);
     }
 
-   enum E {
+    enum E {
         A {
             int key() {
                 return 1;
@@ -1258,6 +1293,7 @@ public class JSONObjectTest {
                 return 2;
             }
         };
+
         int key() {
             return -1;
         }
