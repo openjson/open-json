@@ -141,7 +141,7 @@ public class JSONObject {
     public JSONObject(Map copyFrom) {
         this();
         if (copyFrom != null) {
-            Map<?, ?> contentsTyped = (Map<?, ?>) copyFrom;
+            Map<?, ?> contentsTyped = copyFrom;
             for (Map.Entry<?, ?> entry : contentsTyped.entrySet()) {
             /*
              * Deviate from the original by checking that keys are non-null and
@@ -215,7 +215,7 @@ public class JSONObject {
      * @throws JSONException If there is an exception while reading the bean
      */
     public JSONObject(Object bean) throws JSONException {
-        this(propertiesAsMap(bean));
+        this(bean instanceof JSONObject ? ((JSONObject)bean).nameValuePairs : propertiesAsMap(bean));
     }
 
     private static Map<String, Object> propertiesAsMap(Object bean) throws JSONException {
@@ -916,7 +916,7 @@ public class JSONObject {
         }
 
         long longValue = number.longValue();
-        if (doubleValue == (double) longValue) {
+        if (doubleValue == longValue) {
             return Long.toString(longValue);
         }
 

@@ -398,6 +398,18 @@ public class JSONStringer {
     }
 
     /**
+     * Creates String representation of the key (property name) to this stringer
+     * Override this method to provide your own representation of the name.
+     *
+     * @param name the name of the forthcoming value.
+     * @return this stringer.
+     */
+    protected JSONStringer createKey(String name) {
+        string(name);
+        return this;
+    }
+
+    /**
      * Encodes the key (property name) to this stringer.
      *
      * @param name the name of the forthcoming value. May not be null.
@@ -409,8 +421,7 @@ public class JSONStringer {
             throw new JSONException("Names must be non-null");
         }
         beforeKey();
-        string(name);
-        return this;
+        return createKey(name);
     }
 
     /**

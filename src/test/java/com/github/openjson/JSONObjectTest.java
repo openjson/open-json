@@ -16,7 +16,13 @@
 
 package com.github.openjson;
 
-import org.junit.Test;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;
@@ -36,13 +42,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.junit.Test;
 
 /**
  * This black box test was written without inspecting the non-free org.json sourcecode.
@@ -390,19 +390,23 @@ public class JSONObjectTest {
     @Test
     public void testOtherNumbers() throws JSONException {
         Number nan = new Number() {
-            public int intValue() {
+            @Override
+			public int intValue() {
                 throw new UnsupportedOperationException();
             }
 
-            public long longValue() {
+            @Override
+			public long longValue() {
                 throw new UnsupportedOperationException();
             }
 
-            public float floatValue() {
+            @Override
+			public float floatValue() {
                 throw new UnsupportedOperationException();
             }
 
-            public double doubleValue() {
+            @Override
+			public double doubleValue() {
                 return Double.NaN;
             }
 
@@ -913,6 +917,23 @@ public class JSONObjectTest {
     }
 
     @Test
+    public void testCopyConstructorNoNames() throws JSONException {
+        JSONObject obj = new JSONObject().put("var", "Test 1");
+        JSONObject source = new JSONObject();
+        source.put("a", JSONObject.NULL);
+        source.put("b", false);
+        source.put("c", 5);
+        source.put("comp", obj);
+
+        JSONObject copy = new JSONObject(source);
+        assertEquals(source.length(), copy.length());
+        assertEquals(source.get("a"), copy.get("a"));
+        assertEquals(source.get("b"), copy.opt("b"));
+        assertEquals(source.get("c"), copy.get("c"));
+        assertEquals(source.get("comp"), copy.get("comp"));
+    }
+
+    @Test
     public void testAccumulateMutatesInPlace() throws JSONException {
         JSONObject object = new JSONObject();
         object.put("foo", 5);
@@ -1285,11 +1306,13 @@ public class JSONObjectTest {
 
     enum E {
         A {
-            int key() {
+            @Override
+			int key() {
                 return 1;
             }
         }, B {
-            int key() {
+            @Override
+			int key() {
                 return 2;
             }
         };
