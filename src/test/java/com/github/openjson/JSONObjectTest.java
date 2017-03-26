@@ -391,22 +391,22 @@ public class JSONObjectTest {
     public void testOtherNumbers() throws JSONException {
         Number nan = new Number() {
             @Override
-			public int intValue() {
+            public int intValue() {
                 throw new UnsupportedOperationException();
             }
 
             @Override
-			public long longValue() {
+            public long longValue() {
                 throw new UnsupportedOperationException();
             }
 
             @Override
-			public float floatValue() {
+            public float floatValue() {
                 throw new UnsupportedOperationException();
             }
 
             @Override
-			public double doubleValue() {
+            public double doubleValue() {
                 return Double.NaN;
             }
 

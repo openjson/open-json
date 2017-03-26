@@ -16,11 +16,13 @@
 
 package com.github.openjson;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  * This black box test was written without inspecting the non-free org.json sourcecode.
@@ -107,6 +109,29 @@ public class JSONStringerTest {
                 "\"c\":5," +
                 "\"d\":\"five\"," +
                 "\"e\":null}", stringer.toString());
+    }
+
+    @Test
+    public void testCustomNameStringer() throws JSONException {
+        JSONStringer stringer = new JSONStringer() {
+            @Override
+            protected JSONStringer createKey(String name) {
+                out.append(name);
+                return this;
+            }
+        };
+        stringer.object();
+        stringer.key("a").value(false);
+        stringer.key("b").value(5.0);
+        stringer.key("c").value(5L);
+        stringer.key("d").value("five");
+        stringer.key("e").value(null);
+        stringer.endObject();
+        assertEquals("{a:false," +
+                "b:5," +
+                "c:5," +
+                "d:\"five\"," +
+                "e:null}", stringer.toString());
     }
 
     /**
