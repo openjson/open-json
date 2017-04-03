@@ -19,6 +19,7 @@ package com.github.openjson;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 // Note: this class was written without inspecting the non-free org.json sourcecode.
 
@@ -241,7 +242,7 @@ public class JSONStringer {
             return this;
 
         } else if (value instanceof JSONObject) {
-            ((JSONObject) value).writeTo(this);
+            ((JSONObject) value).toString(this);
             return this;
         }
 
@@ -323,6 +324,17 @@ public class JSONStringer {
         beforeValue();
         out.append(value);
         return this;
+    }
+
+    /**
+     * Encodes {@code key}/{@code value} pair to this stringer.
+     *
+     * @param entry The entry to encode.
+     * @return this stringer.
+     * @throws JSONException If we have an internal error. Shouldn't happen.
+     */
+    public JSONStringer entry(Map.Entry<String, Object> entry) {
+        return this.key(entry.getKey()).value(entry.getValue());
     }
 
     private void string(String value) {

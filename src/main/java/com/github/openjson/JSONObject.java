@@ -855,9 +855,7 @@ public class JSONObject {
     @Override
     public String toString() {
         try {
-            JSONStringer stringer = new JSONStringer();
-            writeTo(stringer);
-            return stringer.toString();
+            return toString(new JSONStringer());
         } catch (JSONException e) {
             return null;
         }
@@ -881,17 +879,25 @@ public class JSONObject {
      * @throws JSONException On internal errors. Shouldn't happen.
      */
     public String toString(int indentSpaces) throws JSONException {
-        JSONStringer stringer = new JSONStringer(indentSpaces);
-        writeTo(stringer);
-        return stringer.toString();
+        return toString(new JSONStringer(indentSpaces));
     }
 
-    void writeTo(JSONStringer stringer) throws JSONException {
-        stringer.object();
-        for (Map.Entry<String, Object> entry : nameValuePairs.entrySet()) {
-            stringer.key(entry.getKey()).value(entry.getValue());
+    /**
+     * Encodes this object Using {@link JSONStringer} provided:
+     * @return The string representation of this.
+     * @throws JSONException On internal errors. Shouldn't happen.
+     */
+    public String toString(JSONStringer stringer) throws JSONException {
+        try {
+            stringer.object();
+            for (Map.Entry<String, Object> entry : nameValuePairs.entrySet()) {
+                stringer.entry(entry);
+            }
+            stringer.endObject();
+            return stringer.toString();
+        } catch (JSONException e) {
+            return null;
         }
-        stringer.endObject();
     }
 
     /**
