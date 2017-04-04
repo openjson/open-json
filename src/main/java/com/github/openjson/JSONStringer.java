@@ -238,7 +238,7 @@ public class JSONStringer {
         }
 
         if (value instanceof JSONArray) {
-            ((JSONArray) value).writeTo(this);
+            ((JSONArray) value).toString(this);
             return this;
 
         } else if (value instanceof JSONObject) {
@@ -334,7 +334,7 @@ public class JSONStringer {
      * @throws JSONException If we have an internal error. Shouldn't happen.
      */
     public JSONStringer entry(Map.Entry<String, Object> entry) {
-        if (entry.getValue() != null) {
+        if (!JSONObject.NULL.equals(entry.getValue())) {
             this.key(entry.getKey()).value(entry.getValue());
         }
         return this;

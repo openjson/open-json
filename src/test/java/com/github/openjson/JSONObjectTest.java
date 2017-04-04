@@ -1066,6 +1066,12 @@ public class JSONObjectTest {
     }
 
     @Test
+    public void testToStringWithWrappedNulls() throws JSONException {
+        JSONObject obj = new JSONObject(new Bean(100, "Test String", null));
+        assertEquals("{\"i\":100,\"s\":\"Test String\"}", obj.toString());
+    }
+
+    @Test
     public void testNames() throws JSONException {
         JSONObject object = new JSONObject();
         object.put("foo", 5);
@@ -1310,6 +1316,43 @@ public class JSONObjectTest {
         }
     }
 
+    private static class Bean {
+        private Integer i;
+        private String s;
+        private Object o;
+        Bean() {}
+
+        Bean(Integer i, String s, Object o) {
+            this.i = i;
+            this.s = s;
+            this.o = o;
+        }
+
+        public Integer getI() {
+            return i;
+        }
+
+        public void setI(Integer i) {
+            this.i = i;
+        }
+
+        public String getS() {
+            return s;
+        }
+
+        public void setS(String s) {
+            this.s = s;
+        }
+
+        public Object getO() {
+            return o;
+        }
+
+        public void setO(Object o) {
+            this.o = o;
+        }
+    }
+
     @Test
     public void testEnumWrapper() throws Exception {
         Object y = JSONObject.wrap(E.A);
@@ -1320,12 +1363,12 @@ public class JSONObjectTest {
     enum E {
         A {
             @Override
-			int key() {
+            int key() {
                 return 1;
             }
         }, B {
             @Override
-			int key() {
+            int key() {
                 return 2;
             }
         };

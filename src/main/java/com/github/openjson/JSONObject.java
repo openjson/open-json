@@ -883,21 +883,19 @@ public class JSONObject {
     }
 
     /**
-     * Encodes this object Using {@link JSONStringer} provided:
+     * Encodes this object using {@link JSONStringer} provided
+     *
+     * @param stringer - {@link JSONStringer} to be used for serialization
      * @return The string representation of this.
      * @throws JSONException On internal errors. Shouldn't happen.
      */
     public String toString(JSONStringer stringer) throws JSONException {
-        try {
-            stringer.object();
-            for (Map.Entry<String, Object> entry : nameValuePairs.entrySet()) {
-                stringer.entry(entry);
-            }
-            stringer.endObject();
-            return stringer.toString();
-        } catch (JSONException e) {
-            return null;
+        stringer.object();
+        for (Map.Entry<String, Object> entry : nameValuePairs.entrySet()) {
+            stringer.entry(entry);
         }
+        stringer.endObject();
+        return stringer.toString();
     }
 
     /**

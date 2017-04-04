@@ -16,18 +16,18 @@
 
 package com.github.openjson;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.junit.Test;
 
 /**
  * This black box test was written without inspecting the non-free org.json sourcecode.
@@ -525,6 +525,26 @@ public class JSONArrayTest {
         // when the array contains an unsupported number, toString returns null!
         JSONArray array = new JSONArray(Arrays.asList(5.5, Double.NaN));
         assertNull(array.toString());
+    }
+
+    @Test
+    public void testToStringWithNulls() throws JSONException {
+        // when the array contains an unsupported number, toString returns null!
+        JSONArray array = new JSONArray(Arrays.asList(
+                new JSONObject()
+                    .put("a", "A String")
+                    .put("n", 666)
+                    .put("null", null)
+                    .put("o", new JSONObject()
+                            .put("b", "B String")
+                            .put("null", null)
+                            .put("bool", false))
+                , new JSONObject()
+                    .put("a", "A String")
+                    .put("n", 666)
+                    .put("null", null)
+                ));
+        assertEquals("[{\"a\":\"A String\",\"n\":666,\"o\":{\"b\":\"B String\",\"bool\":false}},{\"a\":\"A String\",\"n\":666}]", array.toString());
     }
 
     @Test

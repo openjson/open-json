@@ -711,9 +711,7 @@ public class JSONArray {
     @Override
     public String toString() {
         try {
-            JSONStringer stringer = new JSONStringer();
-            writeTo(stringer);
-            return stringer.toString();
+            return toString(new JSONStringer());
         } catch (JSONException e) {
             return null;
         }
@@ -734,17 +732,23 @@ public class JSONArray {
      * @throws JSONException Only if there is a coding error.
      */
     public String toString(int indentSpaces) throws JSONException {
-        JSONStringer stringer = new JSONStringer(indentSpaces);
-        writeTo(stringer);
-        return stringer.toString();
+        return toString(new JSONStringer(indentSpaces));
     }
 
-    void writeTo(JSONStringer stringer) throws JSONException {
+    /**
+     * Encodes this array using {@link JSONStringer} provided
+     *
+     * @param stringer - {@link JSONStringer} to be used for serialization
+     * @return The string representation of this.
+     * @throws JSONException On internal errors. Shouldn't happen.
+     */
+    public String toString(JSONStringer stringer) throws JSONException {
         stringer.array();
         for (Object value : values) {
             stringer.value(value);
         }
         stringer.endArray();
+        return stringer.toString();
     }
 
     @Override
