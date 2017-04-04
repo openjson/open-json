@@ -1053,6 +1053,19 @@ public class JSONObjectTest {
     }
 
     @Test
+    public void testToStringWithNulls() throws JSONException {
+        JSONObject obj = new JSONObject();
+        obj.put("a", "A String")
+            .put("n", 666)
+            .put("null", null)
+            .put("o", new JSONObject()
+                    .put("b", "B String")
+                    .put("null", null)
+                    .put("bool", false));
+        assertEquals("{\"a\":\"A String\",\"n\":666,\"o\":{\"b\":\"B String\",\"bool\":false}}", obj.toString());
+    }
+
+    @Test
     public void testNames() throws JSONException {
         JSONObject object = new JSONObject();
         object.put("foo", 5);

@@ -334,7 +334,10 @@ public class JSONStringer {
      * @throws JSONException If we have an internal error. Shouldn't happen.
      */
     public JSONStringer entry(Map.Entry<String, Object> entry) {
-        return this.key(entry.getKey()).value(entry.getValue());
+        if (entry.getValue() != null) {
+            this.key(entry.getKey()).value(entry.getValue());
+        }
+        return this;
     }
 
     private void string(String value) {
