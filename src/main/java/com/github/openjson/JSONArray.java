@@ -21,6 +21,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 // Note: this class was written without inspecting the non-free org.json sourcecode.
 
 /**
@@ -46,7 +49,7 @@ import java.util.List;
  * prohibit it" for further information.
  */
 public class JSONArray {
-
+    private final static Logger log = LoggerFactory.getLogger(JSONArray.class);
     private final List<Object> values;
 
     /**
@@ -713,6 +716,7 @@ public class JSONArray {
         try {
             return toString(new JSONStringer());
         } catch (JSONException e) {
+            log.error("Unexpected exception", e);
             return null;
         }
     }
