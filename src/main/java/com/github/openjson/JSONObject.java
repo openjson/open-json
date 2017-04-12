@@ -28,9 +28,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 // Note: this class was written without inspecting the non-free org.json sourcecode.
 
 /**
@@ -86,7 +83,6 @@ import org.slf4j.LoggerFactory;
  * prohibit it" for further information.
  */
 public class JSONObject {
-    private final static Logger log = LoggerFactory.getLogger(JSONObject.class);
     private static final Double NEGATIVE_ZERO = -0d;
 
     /**
@@ -854,13 +850,18 @@ public class JSONObject {
     /**
      * Encodes this object as a compact JSON string, such as:
      * <pre>{"query":"Pizza","locations":[94043,90210]}</pre>
+     *
+     * Note 1: this method will not output any fields with 'null' value.
+     * Override {@link JSONStringer#value(Object)} method to have nulls printed.
+     *
+     * Note 2: this method will suppress any internal exceptions.
+     * Use {@link JSONObject#toString(JSONStringer)} method directly to handle exceptions manually.
      */
     @Override
     public String toString() {
         try {
             return toString(new JSONStringer());
         } catch (JSONException e) {
-            log.error("Unexpected exception", e);
             return null;
         }
     }
