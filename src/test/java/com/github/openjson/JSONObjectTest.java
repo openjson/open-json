@@ -40,7 +40,6 @@ import java.util.TreeSet;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -55,9 +54,7 @@ public class JSONObjectTest {
     public void testKeyset() throws Exception {
         JSONObject x = new JSONObject("{'a':1, 'b':2, 'c':3}");
         Set<String> k = new TreeSet<String>();
-        for (String kx : Arrays.asList("a", "b", "c")) {
-            k.add(kx);
-        }
+        k.addAll(Arrays.asList("a", "b", "c"));
         assertEquals(x.keySet(), k);
         x = new JSONObject("{}");
         assertEquals(x.keySet().size(), 0);

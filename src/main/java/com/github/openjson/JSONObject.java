@@ -140,8 +140,7 @@ public class JSONObject {
     public JSONObject(Map copyFrom) {
         this();
         if (copyFrom != null) {
-            Map<?, ?> contentsTyped = copyFrom;
-            for (Map.Entry<?, ?> entry : contentsTyped.entrySet()) {
+            for (Map.Entry<?, ?> entry : ((Map<?, ?>) copyFrom).entrySet()) {
             /*
              * Deviate from the original by checking that keys are non-null and
              * of the proper type. (We still defer validating the values).
@@ -852,7 +851,7 @@ public class JSONObject {
      * <pre>{"query":"Pizza","locations":[94043,90210]}</pre>
      *
      * Note 1: this method will not output any fields with 'null' value.
-     * Override {@link JSONStringer#value(Object)} method to have nulls printed.
+     * Override {@link JSONStringer#entry} method to have nulls printed.
      *
      * Note 2: this method will suppress any internal exceptions.
      * Use {@link JSONObject#toString(JSONStringer)} method directly to handle exceptions manually.
@@ -895,12 +894,22 @@ public class JSONObject {
      * @throws JSONException On internal errors. Shouldn't happen.
      */
     public String toString(JSONStringer stringer) throws JSONException {
+        encode(stringer);
+        return stringer.toString();
+    }
+
+    /**
+     * Encodes this object using {@link JSONStringer} provided
+     *
+     * @param stringer - {@link JSONStringer} to be used for serialization
+     * @throws JSONException On internal errors. Shouldn't happen.
+     */
+    protected void encode(JSONStringer stringer) throws JSONException {
         stringer.object();
         for (Map.Entry<String, Object> entry : nameValuePairs.entrySet()) {
             stringer.entry(entry);
         }
         stringer.endObject();
-        return stringer.toString();
     }
 
     /**

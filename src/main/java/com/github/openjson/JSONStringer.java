@@ -238,11 +238,11 @@ public class JSONStringer {
         }
 
         if (value instanceof JSONArray) {
-            ((JSONArray) value).toString(this);
+            ((JSONArray) value).encode(this);
             return this;
 
         } else if (value instanceof JSONObject) {
-            ((JSONObject) value).toString(this);
+            ((JSONObject) value).encode(this);
             return this;
         }
 
