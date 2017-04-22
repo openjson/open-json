@@ -1377,4 +1377,55 @@ public class JSONObjectTest {
             return -1;
         }
     }
+
+    @Test
+    public void testToString() {
+        MyPojo1 myPojo1 = new MyPojo1();
+        MyPojo2 myPojo2 = new MyPojo2();
+
+        String json1 = new JSONObject(myPojo1).toString();
+        String json2 = new JSONObject(myPojo2).toString();
+
+        assertEquals(json1, "{\"myProp1\":\"value1\",\"myProp2\":\"value2\"}");
+        assertEquals(json2, "{\"myProp3\":\"value3\",\"myProp4\":\"value4\",\"myProp5\":\"value5\"}");
+    }
+
+    public static class MyPojo1 {
+        private String myProp1 = "value1";
+        private String myProp2 = "value2";
+
+        public MyPojo1() {
+        }
+
+        public String getMyProp1() {
+            return this.myProp1;
+        }
+
+        public String getMyProp2() {
+            return this.myProp2;
+        }
+    }
+
+    public static class MyPojo2 implements JSONString {
+        private String myProp3 = "value3";
+        private String myProp4 = "value4";
+
+        public MyPojo2() {
+        }
+
+        public String getMyProp3() {
+            return this.myProp3;
+        }
+
+        public String getMyProp4() {
+            return this.myProp4;
+        }
+
+        @Override
+        public String toJSONString() {
+            JSONObject object = new JSONObject(JSONObject.objectAsMap(this));
+            object.put("myProp5", "value5");
+            return object.toString();
+        }
+    }
 }

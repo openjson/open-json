@@ -143,20 +143,7 @@ public class JSONObject {
     /* (accept a raw type for API compatibility) */
     public JSONObject(Map copyFrom) {
         this();
-        if (copyFrom != null) {
-            Map<?, ?> contentsTyped = copyFrom;
-            for (Map.Entry<?, ?> entry : contentsTyped.entrySet()) {
-            /*
-             * Deviate from the original by checking that keys are non-null and
-             * of the proper type. (We still defer validating the values).
-             */
-                String key = (String) entry.getKey();
-                if (key == null) {
-                    throw new NullPointerException("key == null");
-                }
-                nameValuePairs.put(key, wrap(entry.getValue()));
-            }
-        }
+        init(copyFrom);
     }
 
     /**
@@ -169,16 +156,8 @@ public class JSONObject {
      *                       {@code JSONObject}.
      */
     public JSONObject(JSONTokener readFrom) throws JSONException {
-        /*
-         * Getting the parser to populate this could get tricky. Instead, just
-         * parse to temporary JSONObject and then steal the data from that.
-         */
-        Object object = readFrom.nextValue();
-        if (object instanceof JSONObject) {
-            this.nameValuePairs = ((JSONObject) object).nameValuePairs;
-        } else {
-            throw JSON.typeMismatch(object, "JSONObject");
-        }
+        this();
+        init(readFrom);
     }
 
     /**
@@ -218,10 +197,54 @@ public class JSONObject {
      * @throws JSONException If there is an exception while reading the bean
      */
     public JSONObject(Object bean) throws JSONException {
-        this(bean instanceof JSONObject ? ((JSONObject)bean).nameValuePairs : propertiesAsMap(bean));
+        this();
+        if (bean instanceof JSONObject) {
+            init(((JSONObject)bean).nameValuePairs);
+        } else if (bean instanceof JSONString) {
+            init(new JSONTokener(((JSONString)bean).toJSONString()));
+        } else {
+            init(objectAsMap(bean));
+        }
     }
 
-    private static Map<String, Object> propertiesAsMap(Object bean) throws JSONException {
+    private void init(JSONTokener readFrom) {
+        /*
+         * Getting the parser to populate this could get tricky. Instead, just
+         * parse to temporary JSONObject and then steal the data from that.
+         */
+        Object object = readFrom.nextValue();
+        if (object instanceof JSONObject) {
+            this.nameValuePairs.putAll(((JSONObject) object).nameValuePairs);
+        } else {
+            throw JSON.typeMismatch(object, "JSONObject");
+        }
+    }
+
+    private void init(Map copyFrom) {
+        if (copyFrom != null) {
+            Map<?, ?> contentsTyped = copyFrom;
+            for (Map.Entry<?, ?> entry : contentsTyped.entrySet()) {
+            /*
+             * Deviate from the original by checking that keys are non-null and
+             * of the proper type. (We still defer validating the values).
+             */
+                String key = (String) entry.getKey();
+                if (key == null) {
+                    throw new NullPointerException("key == null");
+                }
+                nameValuePairs.put(key, wrap(entry.getValue()));
+            }
+        }
+    }
+
+    /**
+     * Creates a name-value map from a bean
+     * 
+     * @param bean the bean to create the map from
+     * @return name-value map representing the bean
+     * @throws JSONException If there is an exception while reading the bean
+     */
+    public static Map<String, Object> objectAsMap(Object bean) throws JSONException {
         Map<String, Object> props = new TreeMap<String, Object>();
         try {
             PropertyDescriptor[] properties = Introspector.getBeanInfo(bean.getClass(), Object.class)
