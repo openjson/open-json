@@ -16,13 +16,7 @@
 
 package com.github.openjson;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.junit.Test;
 
 import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;
@@ -30,6 +24,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -42,7 +37,13 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.junit.Test;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * This black box test was written without inspecting the non-free org.json sourcecode.
@@ -53,9 +54,7 @@ public class JSONObjectTest {
     public void testKeyset() throws Exception {
         JSONObject x = new JSONObject("{'a':1, 'b':2, 'c':3}");
         Set<String> k = new TreeSet<String>();
-        for (String kx : Arrays.asList("a", "b", "c")) {
-            k.add(kx);
-        }
+        k.addAll(Arrays.asList("a", "b", "c"));
         assertEquals(x.keySet(), k);
         x = new JSONObject("{}");
         assertEquals(x.keySet().size(), 0);
@@ -1069,6 +1068,30 @@ public class JSONObjectTest {
     public void testToStringWithWrappedNulls() throws JSONException {
         JSONObject obj = new JSONObject(new Bean(100, "Test String", null));
         assertEquals("{\"i\":100,\"s\":\"Test String\"}", obj.toString());
+    }
+
+    /**
+     * This test shows that toString from openjson is not compatible with org.json for null collections.
+     * org.json prints empty array when openjson strips null regardless of a type.
+     */
+    @Test
+    @SuppressWarnings("RedundantCast")
+    public void testToStringWithNullCollection() throws JSONException {
+        JSONObject obj = new JSONObject();
+        obj.put("c", ((Collection<?>)null));
+        assertEquals("{}", obj.toString()); // org.json will output {"c":[]}
+    }
+
+    /**
+     * This test shows that toString from openjson is not compatible with org.json for null collections.
+     * org.json prints empty array when openjson strips null regardless of a type.
+     */
+    @Test
+    @SuppressWarnings("RedundantCast")
+    public void testToStringWithNullMap() throws JSONException {
+        JSONObject obj = new JSONObject();
+        obj.put("m", ((Map<?,?>)null));
+        assertEquals("{}", obj.toString()); // org.json will output {"m":{}}
     }
 
     @Test

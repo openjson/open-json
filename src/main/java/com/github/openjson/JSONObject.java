@@ -28,9 +28,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 // Note: this class was written without inspecting the non-free org.json sourcecode.
 
 /**
@@ -86,7 +83,6 @@ import org.slf4j.LoggerFactory;
  * prohibit it" for further information.
  */
 public class JSONObject {
-    private final static Logger log = LoggerFactory.getLogger(JSONObject.class);
     private static final Double NEGATIVE_ZERO = -0d;
 
     /**
@@ -222,8 +218,7 @@ public class JSONObject {
 
     private void init(Map copyFrom) {
         if (copyFrom != null) {
-            Map<?, ?> contentsTyped = copyFrom;
-            for (Map.Entry<?, ?> entry : contentsTyped.entrySet()) {
+            for (Map.Entry<?, ?> entry : ((Map<?, ?>) copyFrom).entrySet()) {
             /*
              * Deviate from the original by checking that keys are non-null and
              * of the proper type. (We still defer validating the values).
@@ -877,13 +872,18 @@ public class JSONObject {
     /**
      * Encodes this object as a compact JSON string, such as:
      * <pre>{"query":"Pizza","locations":[94043,90210]}</pre>
+     *
+     * Note 1: this method will not output any fields with 'null' value.
+     * Override {@link JSONStringer#entry} method to have nulls printed.
+     *
+     * Note 2: this method will suppress any internal exceptions.
+     * Use {@link JSONObject#toString(JSONStringer)} method directly to handle exceptions manually.
      */
     @Override
     public String toString() {
         try {
             return toString(new JSONStringer());
         } catch (JSONException e) {
-            log.error("Unexpected exception", e);
             return null;
         }
     }
@@ -917,12 +917,22 @@ public class JSONObject {
      * @throws JSONException On internal errors. Shouldn't happen.
      */
     public String toString(JSONStringer stringer) throws JSONException {
+        encode(stringer);
+        return stringer.toString();
+    }
+
+    /**
+     * Encodes this object using {@link JSONStringer} provided
+     *
+     * @param stringer - {@link JSONStringer} to be used for serialization
+     * @throws JSONException On internal errors. Shouldn't happen.
+     */
+    protected void encode(JSONStringer stringer) throws JSONException {
         stringer.object();
         for (Map.Entry<String, Object> entry : nameValuePairs.entrySet()) {
             stringer.entry(entry);
         }
         stringer.endObject();
-        return stringer.toString();
     }
 
     /**

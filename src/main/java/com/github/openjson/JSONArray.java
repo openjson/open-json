@@ -21,9 +21,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 // Note: this class was written without inspecting the non-free org.json sourcecode.
 
 /**
@@ -49,7 +46,6 @@ import org.slf4j.LoggerFactory;
  * prohibit it" for further information.
  */
 public class JSONArray {
-    private final static Logger log = LoggerFactory.getLogger(JSONArray.class);
     private final List<Object> values;
 
     /**
@@ -709,6 +705,12 @@ public class JSONArray {
      * Encodes this array as a compact JSON string, such as:
      * <pre>[94043,90210]</pre>
      *
+     * Note 1: this method will not output any fields with 'null' value.
+     * Override {@link JSONStringer#entry} method to have nulls printed.
+     *
+     * Note 2: this method will suppress any internal exceptions.
+     * Use {@link JSONArray#toString(JSONStringer)} method directly to handle exceptions manually.
+     *
      * @return The string form of this array.
      */
     @Override
@@ -716,7 +718,6 @@ public class JSONArray {
         try {
             return toString(new JSONStringer());
         } catch (JSONException e) {
-            log.error("Unexpected exception", e);
             return null;
         }
     }
@@ -747,12 +748,22 @@ public class JSONArray {
      * @throws JSONException On internal errors. Shouldn't happen.
      */
     public String toString(JSONStringer stringer) throws JSONException {
+        encode(stringer);
+        return stringer.toString();
+    }
+
+    /**
+     * Encodes this array using {@link JSONStringer} provided
+     *
+     * @param stringer - {@link JSONStringer} to be used for serialization
+     * @throws JSONException On internal errors. Shouldn't happen.
+     */
+    protected void encode(JSONStringer stringer) {
         stringer.array();
         for (Object value : values) {
             stringer.value(value);
         }
         stringer.endArray();
-        return stringer.toString();
     }
 
     @Override
