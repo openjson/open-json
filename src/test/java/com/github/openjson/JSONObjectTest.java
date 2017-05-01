@@ -1407,10 +1407,10 @@ public class JSONObjectTest {
         MyPojo2 myPojo2 = new MyPojo2();
 
         String json1 = new JSONObject(myPojo1).toString();
-        String json2 = new JSONObject(myPojo2).toString();
+        String json2 = new JSONArray().put(myPojo2).toString();
 
-        assertEquals(json1, "{\"myProp1\":\"value1\",\"myProp2\":\"value2\"}");
-        assertEquals(json2, "{\"myProp3\":\"value3\",\"myProp4\":\"value4\",\"myProp5\":\"value5\"}");
+        assertEquals("{\"myProp1\":\"value1\",\"myProp2\":\"value2\"}", json1);
+        assertEquals("[{\"myProp3\":\"value3\",\"myProp4\":\"value4\",\"myProp5\":\"value5\"}]", json2);
     }
 
     public static class MyPojo1 {

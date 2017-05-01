@@ -196,8 +196,6 @@ public class JSONObject {
         this();
         if (bean instanceof JSONObject) {
             init(((JSONObject)bean).nameValuePairs);
-        } else if (bean instanceof JSONString) {
-            init(new JSONTokener(((JSONString)bean).toJSONString()));
         } else {
             init(objectAsMap(bean));
         }
