@@ -548,6 +548,15 @@ public class JSONArrayTest {
     }
 
     @Test
+    public void testToString() {
+        JSONObjectTest.MyPojo2 myPojo = new JSONObjectTest.MyPojo2();
+
+        String json = new JSONArray().put(myPojo).toString();
+
+        assertEquals("[{\"myProp3\":\"value3\",\"myProp4\":\"value4\",\"myProp5\":\"value5\"}]", json);
+    }
+
+    @Test
     public void testEmptyCollectionConstructor() throws JSONException {
         JSONArray array1 = new JSONArray(Collections.emptyList());
         assertEquals(0, array1.length());
