@@ -6,7 +6,7 @@
 
     <groupId>com.github.openjson</groupId>
     <artifactId>openjson</artifactId>
-    <version>1.0.5-SNAPSHOT</version>
+    <version>1.0.5</version>
 
     <packaging>jar</packaging>
     <name>Open JSON</name>
