@@ -20,13 +20,7 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 
 // Note: this class was written without inspecting the non-free org.json sourcecode.
 
@@ -1028,7 +1022,8 @@ public class JSONObject {
                     o instanceof Integer ||
                     o instanceof Long ||
                     o instanceof Short ||
-                    o instanceof String) {
+                    o instanceof String ||
+                    o instanceof JSONString) { // adding JSONString to list for compatibility with org.json
                 return o;
             }
             if (o.getClass().getPackage().getName().startsWith("java.") || o instanceof Enum<?>) {

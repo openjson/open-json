@@ -783,7 +783,7 @@ public class JSONObjectTest {
 
     @Test
     public void testMapConstructorWithNull() throws JSONException {
-        JSONObject object = new JSONObject((Map)null);
+        JSONObject object = new JSONObject((Map) null);
         assertEquals(0, object.keySet().size());
     }
 
@@ -1055,12 +1055,12 @@ public class JSONObjectTest {
     public void testToStringWithNulls() throws JSONException {
         JSONObject obj = new JSONObject();
         obj.put("a", "A String")
-            .put("n", 666)
-            .put("null", null)
-            .put("o", new JSONObject()
-                    .put("b", "B String")
-                    .put("null", null)
-                    .put("bool", false));
+                .put("n", 666)
+                .put("null", null)
+                .put("o", new JSONObject()
+                        .put("b", "B String")
+                        .put("null", null)
+                        .put("bool", false));
         assertEquals("{\"a\":\"A String\",\"n\":666,\"o\":{\"b\":\"B String\",\"bool\":false}}", obj.toString());
     }
 
@@ -1078,7 +1078,7 @@ public class JSONObjectTest {
     @SuppressWarnings("RedundantCast")
     public void testToStringWithNullCollection() throws JSONException {
         JSONObject obj = new JSONObject();
-        obj.put("c", ((Collection<?>)null));
+        obj.put("c", ((Collection<?>) null));
         assertEquals("{}", obj.toString()); // org.json will output {"c":[]}
     }
 
@@ -1090,7 +1090,7 @@ public class JSONObjectTest {
     @SuppressWarnings("RedundantCast")
     public void testToStringWithNullMap() throws JSONException {
         JSONObject obj = new JSONObject();
-        obj.put("m", ((Map<?,?>)null));
+        obj.put("m", ((Map<?, ?>) null));
         assertEquals("{}", obj.toString()); // org.json will output {"m":{}}
     }
 
@@ -1451,4 +1451,13 @@ public class JSONObjectTest {
             return object.toString();
         }
     }
+
+    @Test
+    public void testArrayJSONString() {
+        List<Object> myArray = Arrays.asList(new MyPojo1(), new MyPojo2());
+        String expected = "[{\"myProp1\":\"value1\",\"myProp2\":\"value2\"},{\"myProp3\":\"value3\",\"myProp4\":\"value4\",\"myProp5\":\"value5\"}]";
+        String json = new JSONArray(myArray).toString();
+        assertEquals(expected, json);
+    }
+
 }
