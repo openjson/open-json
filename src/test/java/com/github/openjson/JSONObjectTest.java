@@ -1451,4 +1451,12 @@ public class JSONObjectTest {
             return object.toString();
         }
     }
+
+    @Test
+    public void testArrayJSONString() {
+        List<Object> myArray = Arrays.asList(new MyPojo1(), new MyPojo2());
+        String expected = "[{\"myProp1\":\"value1\",\"myProp2\":\"value2\"},{\"myProp3\":\"value3\",\"myProp4\":\"value4\",\"myProp5\":\"value5\"}]";
+        String json = new JSONArray(myArray).toString();
+        assertEquals(expected, json);
+    }
 }
