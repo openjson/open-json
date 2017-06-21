@@ -22,6 +22,7 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -196,6 +197,8 @@ public class JSONObject {
         this();
         if (bean instanceof JSONObject) {
             init(((JSONObject)bean).nameValuePairs);
+        } else if (bean instanceof JSONArray) {
+            //no-op will produce empty object
         } else {
             init(objectAsMap(bean));
         }

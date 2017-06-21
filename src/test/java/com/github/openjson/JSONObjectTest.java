@@ -933,6 +933,13 @@ public class JSONObjectTest {
     }
 
     @Test
+    public void testArrayConstructor() throws JSONException {
+        final JSONArray array = new JSONArray(new Object[] { 1, 2, 3 });
+        JSONObject obj = new JSONObject(array);
+        assertEquals("The result should be empty object", "{}", obj.toString());
+    }
+
+    @Test
     public void testAccumulateMutatesInPlace() throws JSONException {
         JSONObject object = new JSONObject();
         object.put("foo", 5);
