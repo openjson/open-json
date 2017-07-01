@@ -271,7 +271,7 @@ public class JSONStringerTest {
         assertEscapedAllWays("<\\/foo>", "</foo>");
     }
 
-    private void assertEscapedAllWays(String escaped, String original) throws JSONException {
+    private static void assertEscapedAllWays(String escaped, String original) throws JSONException {
         assertEquals("{\"" + escaped + "\":false}",
                 new JSONStringer().object().key(original).value(false).endObject().toString());
         assertEquals("{\"a\":\"" + escaped + "\"}",
@@ -435,6 +435,16 @@ public class JSONStringerTest {
         s.endArray();
         // note lack of quotes
         assertEquals("[{\"a\":fffooo}]", s.toString());
+    }
+
+    @Test
+    public void testIndent() {
+        JSONObject o = new JSONObject()
+                .put("b", new JSONObject().put("a", false));
+        String result = "{\"b\":{\"a\":false}}";
+        assertEquals(result, o.toString(new JSONStringer(-1)));
+        assertEquals(result, o.toString(new JSONStringer()));
+        assertEquals("{\n   \"b\": {\n      \"a\": false\n   }\n}", o.toString(new JSONStringer(3)));
     }
 
     private static class Goo implements JSONString {

@@ -22,7 +22,6 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -235,7 +234,7 @@ public class JSONObject {
 
     /**
      * Creates a name-value map from a bean
-     * 
+     *
      * @param bean the bean to create the map from
      * @return name-value map representing the bean
      * @throws JSONException If there is an exception while reading the bean
