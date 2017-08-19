@@ -1,0 +1,4 @@
+Bundle-SymbolicName: com.github.openjson
+Export-Package: com.github.openjson
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0
+Bundle-DocURL: https://github.com/laeubi/openjson
