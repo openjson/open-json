@@ -29,7 +29,7 @@ import java.util.Map;
  * API. For example:<pre>
  * JSONObject object = ...
  * String json = object.toString();</pre>
- *
+ * <p>
  * <p>Stringers only encode well-formed JSON strings. In particular:
  * <ul>
  * <li>The stringer must have exactly one top-level array or object.
@@ -43,15 +43,15 @@ import java.util.Map;
  * </ul>
  * Calls that would result in a malformed JSON string will fail with a
  * {@link JSONException}.
- *
+ * <p>
  * <p>This class provides no facility for pretty-printing (ie. indenting)
  * output. To encode indented output, use {@link JSONObject#toString(int)} or
  * {@link JSONArray#toString(int)}.
- *
+ * <p>
  * <p>Some implementations of the API support at most 20 levels of nesting.
  * Attempts to create more than 20 levels of nesting may fail with a {@link
  * JSONException}.
- *
+ * <p>
  * <p>Each stringer may be used to encode a single top level value. Instances of
  * this class are not thread safe. Although this class is nonfinal, it was not
  * designed for inheritance and should not be subclassed. In particular,
@@ -253,13 +253,13 @@ public class JSONStringer {
         beforeValue();
 
         if (value instanceof JSONString) {
-          out.append(((JSONString) value).toJSONString());
-          return this;
+            out.append(((JSONString) value).toJSONString());
+            return this;
         }
 
         if (value == null
-              || value instanceof Boolean
-              || value == JSONObject.NULL) {
+                || value instanceof Boolean
+                || value == JSONObject.NULL) {
             out.append(value);
 
         } else if (value instanceof Number) {
@@ -268,7 +268,7 @@ public class JSONStringer {
         } else {
             // Hack to make it possible that the value is not surrounded by quotes. (Used for JavaScript function calls)
             // Example: { "name": "testkey", "value": window.myfunction() }
-            if (value.getClass().getSimpleName().contains("JSONFunction")) {
+            if (value.getClass().getName().contains("JSONFunction")) {
                 // note that no escaping of quotes (or anything else) is done in this case.
                 // that is fine because the only way to get to this point is to
                 // explicitly put a special kind of object into the JSON data structure.
@@ -485,10 +485,10 @@ public class JSONStringer {
 
     /**
      * Returns the encoded JSON string.
-     *
+     * <p>
      * <p>If invoked with unterminated arrays or unclosed objects, this method's
      * return value is undefined.
-     *
+     * <p>
      * <p><strong>Warning:</strong> although it contradicts the general contract
      * of {@link Object#toString}, this method returns null if the stringer
      * contains no data.
