@@ -6,7 +6,7 @@ available under a free license as a small and independent
 dependency.
 
 The [original library](http://www.json.org/) is [licensed under a standard BSD license with an additional line that requires the use of the software only for "non-evil" purposes](http://www.json.org/license.html).
-Since this is ill-defined, many downstream consumers of this softwarefind this license condition unacceptable.
+Since this is ill-defined, many downstream consumers of this software find this license condition unacceptable.
 The moral is don't put jokes into legal documents.
 More background information is collected by the Debian team members at <https://wiki.debian.org/qa.debian.org/jsonevil>.
 Relicensing the original library is impossible. See <https://github.com/stleary/JSON-java/issues/331> for more information.
@@ -16,7 +16,7 @@ Relicensing the original library is impossible. See <https://github.com/stleary/
     <dependency>
         <groupId>com.github.openjson</groupId>
         <artifactId>openjson</artifactId>
-        <version>1.0.10</version>
+        <version>1.0.11</version>
     </dependency>
 ```
   
