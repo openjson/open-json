@@ -1,8 +1,4 @@
 language: java
-script: mvn test
-addons:
-  apt:
-    packages:
-      - openjdk-7-jdk
 jdk:
-  - openjdk7
+  - openjdk8
+  - openjdk11
