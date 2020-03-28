@@ -21,6 +21,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -712,4 +713,14 @@ public class JSONArrayTest {
         assertEquals("[\"A\",\"B\",\"C\"]", a2.toString());
     }
 
+    @Test
+    public void testIterator() {
+        JSONArray a = new JSONArray();
+        a.put(1234);
+        a.put("foo");
+        Iterator<Object> iterator = a.iterator();
+        assertEquals(1234, iterator.next());
+        assertEquals("foo", iterator.next());
+        assertFalse(iterator.hasNext());
+    }
 }

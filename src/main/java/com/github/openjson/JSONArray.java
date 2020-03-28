@@ -19,6 +19,7 @@ package com.github.openjson;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 // Note: this class was written without inspecting the non-free org.json sourcecode.
@@ -45,7 +46,7 @@ import java.util.List;
  * <i>Effective Java</i> Item 17, "Design and Document or inheritance or else
  * prohibit it" for further information.
  */
-public class JSONArray {
+public class JSONArray implements Iterable<Object> {
     private final List<Object> values;
 
     /**
@@ -764,6 +765,11 @@ public class JSONArray {
             stringer.value(value);
         }
         stringer.endArray();
+    }
+
+    @Override
+    public Iterator<Object> iterator() {
+        return values.iterator();
     }
 
     @Override
