@@ -26,6 +26,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -67,18 +68,18 @@ public class JSONArrayTest {
     public void testEqualsAndHashCode() throws JSONException {
         JSONArray a = new JSONArray();
         JSONArray b = new JSONArray();
-        assertTrue(a.equals(b));
+        assertEquals(a, b);
         assertEquals("equals() not consistent with hashCode()", a.hashCode(), b.hashCode());
 
         a.put(true);
         a.put(false);
         b.put(true);
         b.put(false);
-        assertTrue(a.equals(b));
+        assertEquals(a, b);
         assertEquals(a.hashCode(), b.hashCode());
 
         b.put(true);
-        assertFalse(a.equals(b));
+        assertNotEquals(a, b);
         assertTrue(a.hashCode() != b.hashCode());
     }
 
@@ -100,10 +101,10 @@ public class JSONArrayTest {
         assertFalse(array.isNull(1));
         assertFalse(array.isNull(2));
         assertFalse(array.isNull(3));
-        assertEquals(true, array.optBoolean(0));
-        assertEquals(false, array.optBoolean(1, true));
-        assertEquals(true, array.optBoolean(2, false));
-        assertEquals(false, array.optBoolean(3));
+        assertTrue(array.optBoolean(0));
+        assertFalse(array.optBoolean(1, true));
+        assertTrue(array.optBoolean(2, false));
+        assertFalse(array.optBoolean(3));
         assertEquals("true", array.getString(0));
         assertEquals("false", array.getString(1));
         assertEquals("true", array.optString(2));
@@ -115,21 +116,21 @@ public class JSONArrayTest {
         other.put(false);
         other.put(true);
         other.put(false);
-        assertTrue(array.equals(other));
+        assertEquals(array, other);
         other.put(true);
-        assertFalse(array.equals(other));
+        assertNotEquals(array, other);
 
         other = new JSONArray();
         other.put("true");
         other.put("false");
         other.put("truE");
         other.put("FALSE");
-        assertFalse(array.equals(other));
-        assertFalse(other.equals(array));
-        assertEquals(true, other.getBoolean(0));
-        assertEquals(false, other.optBoolean(1, true));
-        assertEquals(true, other.optBoolean(2));
-        assertEquals(false, other.getBoolean(3));
+        assertNotEquals(array, other);
+        assertNotEquals(other, array);
+        assertTrue(other.getBoolean(0));
+        assertFalse(other.optBoolean(1, true));
+        assertTrue(other.optBoolean(2));
+        assertFalse(other.getBoolean(3));
     }
 
 
@@ -165,8 +166,8 @@ public class JSONArrayTest {
             fail();
         } catch (JSONException ignored) {
         }
-        assertEquals(false, array.optBoolean(0));
-        assertEquals(true, array.optBoolean(0, true));
+        assertFalse(array.optBoolean(0));
+        assertTrue(array.optBoolean(0, true));
     }
 
     @Test
@@ -195,9 +196,9 @@ public class JSONArrayTest {
         } catch (JSONException ignored) {
         }
         assertEquals(JSONObject.NULL, array.opt(0));
-        assertEquals(null, array.opt(1));
-        assertEquals(null, array.opt(2));
-        assertEquals(null, array.opt(3));
+        assertNull(array.opt(1));
+        assertNull(array.opt(2));
+        assertNull(array.opt(3));
         assertTrue(array.isNull(0));
         assertTrue(array.isNull(1));
         assertTrue(array.isNull(2));
@@ -284,10 +285,10 @@ public class JSONArrayTest {
         other.put(objElement);
         other.put(arrElement);
         other.put(Integer.MIN_VALUE);
-        assertTrue(array.equals(other));
+        assertEquals(array, other);
         other.put(0, 0L);
         other.put(6, Integer.MIN_VALUE);
-        assertFalse(array.equals(other));
+        assertNotEquals(array, other);
     }
 
     @Test
@@ -317,9 +318,9 @@ public class JSONArrayTest {
         assertFalse(array.isNull(0));
         assertFalse(array.isNull(3));
 
-        assertEquals(true, array.getBoolean(0));
-        assertEquals(true, array.optBoolean(0));
-        assertEquals(true, array.optBoolean(0, false));
+        assertTrue(array.getBoolean(0));
+        assertTrue(array.optBoolean(0));
+        assertTrue(array.optBoolean(0, false));
         assertEquals(0, array.optInt(0));
         assertEquals(-2, array.optInt(0, -2));
 
@@ -506,7 +507,7 @@ public class JSONArrayTest {
         array.put(Double.valueOf(Double.NaN));
         array.put(Double.valueOf(Double.NEGATIVE_INFINITY));
         array.put(Double.valueOf(Double.POSITIVE_INFINITY));
-        assertEquals(null, array.toString());
+        assertNull(array.toString());
     }
 
     /**
@@ -659,8 +660,8 @@ public class JSONArrayTest {
     public void testAccessOutOfBounds() throws JSONException {
         JSONArray array = new JSONArray();
         array.put("foo");
-        assertEquals(null, array.opt(3));
-        assertEquals(null, array.opt(-3));
+        assertNull(array.opt(3));
+        assertNull(array.opt(-3));
         assertEquals("", array.optString(3));
         assertEquals("", array.optString(-3));
         try {
@@ -686,16 +687,16 @@ public class JSONArrayTest {
     }
 
     @Test
-    public void test_remove() throws Exception {
+    public void test_remove() {
         JSONArray a = new JSONArray();
-        assertEquals(null, a.remove(-1));
-        assertEquals(null, a.remove(0));
+        assertNull(a.remove(-1));
+        assertNull(a.remove(0));
 
         a.put("hello");
-        assertEquals(null, a.remove(-1));
-        assertEquals(null, a.remove(1));
+        assertNull(a.remove(-1));
+        assertNull(a.remove(1));
         assertEquals("hello", a.remove(0));
-        assertEquals(null, a.remove(0));
+        assertNull(a.remove(0));
     }
 
     enum MyEnum {A, B, C}
@@ -703,7 +704,7 @@ public class JSONArrayTest {
     // https://code.google.com/p/android/issues/detail?id=62539
     // but changed in open-json to return toString for all enums
     @Test
-    public void testEnums() throws Exception {
+    public void testEnums() {
         // This works because it's in java.* and any class in there falls back to toString.
         JSONArray a1 = new JSONArray(java.lang.annotation.RetentionPolicy.values());
         assertEquals("[\"SOURCE\",\"CLASS\",\"RUNTIME\"]", a1.toString());

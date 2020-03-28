@@ -224,7 +224,6 @@ public class JSONTokener {
             if (c == quote) {
                 if (builder == null) {
                     // a new string avoids leaking memory
-                    //noinspection RedundantStringConstructorCall
                     return new String(in.substring(start, pos - 1));
                 } else {
                     builder.append(in, start, pos - 1);

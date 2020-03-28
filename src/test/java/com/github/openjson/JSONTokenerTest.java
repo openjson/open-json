@@ -94,7 +94,6 @@ public class JSONTokenerTest extends TestCase {
         } catch (NullPointerException ignored) {
         }
 
-        //noinspection ThrowableResultOfMethodCallIgnored
         assertEquals("foo! at character 0 of null",
                 new JSONTokener((String) null).syntaxError("foo!").getMessage());
 
@@ -132,7 +131,6 @@ public class JSONTokenerTest extends TestCase {
         }
         new JSONTokener("").skipPast("ABC");
         assertEquals('\0', new JSONTokener("").skipTo('A'));
-        //noinspection ThrowableResultOfMethodCallIgnored
         assertEquals("foo! at character 0 of ",
                 new JSONTokener("").syntaxError("foo!").getMessage());
         assertEquals(" at character 0 of ", new JSONTokener("").toString());

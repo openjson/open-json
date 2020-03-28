@@ -92,7 +92,6 @@ public class JSONArray implements Iterable<Object> {
         if (object instanceof JSONArray) {
             values = ((JSONArray) object).values;
         } else {
-            //noinspection ConstantConditions
             throw JSON.typeMismatch(object, "JSONArray");
         }
     }
